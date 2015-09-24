@@ -1,0 +1,5 @@
+whatapp/settings.py
+db.sqlite3
+*.pyc
+.idea
+celerybeat-schedule
