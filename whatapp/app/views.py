@@ -10,7 +10,7 @@ __author__ = 'kenneth'
 def handle_rapidpro(request):
     if request.method == 'POST':
         text = request.POST.get('text')
-        fro = request.POST.get('from')
+        fro = request.POST.get('to')
         id = request.POST.get("id")
 
         m = Message.objects.create(direction=Message.OUTGOING, text=text, urn=fro, rapidpro_id=id)

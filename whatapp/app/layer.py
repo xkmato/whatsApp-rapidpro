@@ -49,9 +49,12 @@ class SendLayer(YowInterfaceLayer):
             self.ackQueue.pop(self.ackQueue.index(entity.getId()))
 
         if not len(self.ackQueue):
-            self.lock.release()
-            logger.info("Message sent")
-            raise KeyboardInterrupt()
+            try:
+                self.lock.release()
+                logger.info("Message sent")
+                raise KeyboardInterrupt()
+            except KeyboardInterrupt:
+                pass
         self.lock.release()
 
 from yowsup.layers.interface import YowInterfaceLayer, ProtocolEntityCallback
