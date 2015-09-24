@@ -1,10 +1,12 @@
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from whatapp.app import tasks
 from whatapp.app.models import Message
 
 __author__ = 'kenneth'
 
 
+@csrf_exempt
 def handle_rapidpro(request):
     if request.method == 'POST':
         text = request.POST.get('text')

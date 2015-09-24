@@ -35,6 +35,11 @@ class Message(models.Model):
             self.status = Message.SENT
             self.save()
 
+    def notify_rapidpro_sent(self):
+        if self.direction != Message.OUTGOING:
+            return
+        requests.post(settings.RAPIDPRO_NOTIFY_SENT, data={'id': self.rapidpro_id})
+
     @classmethod
     def receive(cls, msg, fro):
         return cls.objects.create(text=msg, urn=fro, direction=Message.INCOMING)

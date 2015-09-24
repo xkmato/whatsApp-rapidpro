@@ -27,3 +27,4 @@ def push_rapidpro(messages=None):
         messages = Message.objects.filter(direction=Message.INCOMING, status=Message.QUEUED).order_by('created_on')
     for message in messages:
         message.notify_rapidpro_received()
+        message.notify_rapidpro_sent()
