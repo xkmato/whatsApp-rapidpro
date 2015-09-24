@@ -1,29 +1,33 @@
 from django.conf import settings
-from yowsup.layers.protocol_calls import YowCallsProtocolLayer
-from yowsup.layers.protocol_iq import YowIqProtocolLayer
-from yowsup.layers.protocol_media import YowMediaProtocolLayer
+from yowsup.layers import YowLayerEvent
+from yowsup.layers.auth import YowAuthenticationProtocolLayer, YowCryptLayer, AuthError
+from yowsup.layers.coder import YowCoderLayer
+from yowsup.layers.logger import YowLoggerLayer
+from yowsup.layers.network import YowNetworkLayer
+from yowsup.layers.protocol_acks import YowAckProtocolLayer
+from yowsup.layers.protocol_messages import YowMessagesProtocolLayer
+from yowsup.layers.protocol_receipts import YowReceiptProtocolLayer
+from yowsup.layers.stanzaregulator import YowStanzaRegulator
+from yowsup.stacks import YowStack
+from whatapp.app.send_layer import SendLayer
 
 __author__ = 'kenneth'
 
-from yowsup.stacks import YowStack
-from .layer import EchoLayer
-from yowsup.layers import YowLayerEvent
-from yowsup.layers.auth import YowCryptLayer, YowAuthenticationProtocolLayer, AuthError
-from yowsup.layers.coder import YowCoderLayer
-from yowsup.layers.network import YowNetworkLayer
-from yowsup.layers.protocol_messages import YowMessagesProtocolLayer
-from yowsup.layers.stanzaregulator import YowStanzaRegulator
-from yowsup.layers.protocol_receipts import YowReceiptProtocolLayer
-from yowsup.layers.protocol_acks import YowAckProtocolLayer
-from yowsup.layers.logger import YowLoggerLayer
 
-class YowsupEchoStack(object):
-    def __init__(self, encryption_enabled = True):
+class YowsupSendStack(object):
+    def __init__(self, messages, encryption_enabled=True):
+        """
+        :param credentials:
+        :param messages: list of (jid, message) tuples
+        :param encryptionEnabled:
+        :return:
+        """
+
         if encryption_enabled:
             from yowsup.layers.axolotl import YowAxolotlLayer
             layers = (
-                EchoLayer,
-                (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer),
+                SendLayer,
+                (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer),
                 YowAxolotlLayer,
                 YowLoggerLayer,
                 YowCoderLayer,
@@ -33,8 +37,8 @@ class YowsupEchoStack(object):
             )
         else:
             layers = (
-                EchoLayer,
-                (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer),
+                SendLayer,
+                (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer),
                 YowLoggerLayer,
                 YowCoderLayer,
                 YowCryptLayer,
@@ -43,6 +47,8 @@ class YowsupEchoStack(object):
             )
 
         self.stack = YowStack(layers)
+        self.stack.setProp(SendLayer.PROP_MESSAGES, messages)
+        self.stack.setProp(YowAuthenticationProtocolLayer.PROP_PASSIVE, True)
         self.stack.setCredentials(settings.CREDENTIALS)
 
     def start(self):

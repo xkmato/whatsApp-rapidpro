@@ -114,13 +114,13 @@ STATIC_URL = '/static/'
 
 BROKER_URL = CELERY_RESULT_BACKEND = 'redis://localhost:6379/4'
 
-CELERYBEAT_SCHEDULE = {
-    'push-in': {
-        'task': 'whatapp.app.tasks.push_rapidpro',
-        'schedule': datetime.timedelta(minutes=3),
-        'args': ()
-    },
-}
+# CELERYBEAT_SCHEDULE = {
+#     'push-in': {
+#         'task': 'whatapp.app.tasks.push_to_rapidpro',
+#         'schedule': datetime.timedelta(minutes=10),
+#         'args': ()
+#     },
+# }
 
 CELERY_TIMEZONE = 'UTC'
 

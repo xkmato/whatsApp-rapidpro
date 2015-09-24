@@ -1,7 +1,7 @@
 from celery.utils.log import get_task_logger
 from djcelery_transactions import task
 from whatapp.app.models import Message
-from whatapp.app.stack import YowsupSendStack
+from whatapp.app.send_stack import YowsupSendStack
 
 __author__ = 'kenneth'
 
@@ -22,7 +22,7 @@ def push_out(messages=None, limit=30):
 
 
 @task
-def push_rapidpro(messages=None):
+def push_to_rapidpro(messages=None):
     if not messages:
         messages = Message.objects.filter(direction=Message.INCOMING, status=Message.QUEUED).order_by('created_on')
     for message in messages:
