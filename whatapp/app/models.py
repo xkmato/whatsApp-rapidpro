@@ -14,7 +14,7 @@ class Message(models.Model):
     SENT = 'S'
 
     text = models.TextField()
-    urn = models.CharField(max_length=12)
+    urn = models.CharField(max_length=40)
     direction = models.CharField(choices=(('Incoming', INCOMING), ('Outgoing', OUTGOING)), max_length=1)
     created_on = models.DateTimeField(auto_now_add=True)
     status = models.CharField(choices=(('Queued', QUEUED), ('Sent', SENT)), default=QUEUED, max_length=1)
