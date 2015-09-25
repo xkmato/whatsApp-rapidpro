@@ -11,34 +11,22 @@ logger = get_task_logger(__name__)
 
 
 @task
-def push_out(messages=None, limit=30):
-    if not messages:
-        messages = Message.objects.filter(status=Message.QUEUED, direction=Message.OUTGOING).order_by('created_on')[
-                   :limit]
-    else:
-        messages = Message.objects.filter(pk__in=messages)
-    msg = list(messages.values_list('urn', 'text'))
-    y = YowsupSendStack(msg)
-    y.start()
-    messages.update(status=Message.SENT)
+def push_out(limit=30):
+    r = get_redis_connection()
+    key = 'sending_message_task_on'
+    if not r.get(key):
+        with r.lock(key, timeout=60*10):
+            messages = Message.objects.filter(status=Message.QUEUED, direction=Message.OUTGOING).order_by('created_on')[
+                           :limit]
+            msg = list(messages.values_list('urn', 'text'))
+            y = YowsupSendStack(msg)
+            y.start()
+            messages.update(status=Message.SENT)
 
 
 @task
-def push_to_rapidpro():
-    """
-    Get all messages in Queue
-    """
-    r = get_redis_connection()
-    messages = Message.objects.filter(direction=Message.INCOMING, status=Message.QUEUED)\
-        .order_by('created_on')
-
-    # somebody already handled these messages, move on
+def push_to_rapidpro(messages=None):
     if not messages:
-        return
-
-    key = 'pcmmessage_in_queue'
-    if not r.get(key):
-        with r.lock(key, timeout=60*20):
-            print "Processing %d messages" % messages.count()
-            for message in messages:
-                message.notify_rapidpro_received()
+        messages = Message.objects.filter(direction=Message.INCOMING, status=Message.QUEUED).order_by('created_on')
+    for message in messages:
+        message.notify_rapidpro_received()
