@@ -42,4 +42,3 @@ def push_to_rapidpro():
             print "Processing %d messages" % messages.count()
             for message in messages:
                 message.notify_rapidpro_received()
-                message.notify_rapidpro_sent()
