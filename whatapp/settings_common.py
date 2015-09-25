@@ -33,7 +33,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = (
+    ('Nyaruka', 'code@nyaruka.com'),
+)
 
+MANAGERS = ADMINS
 # Application definition
 
 INSTALLED_APPS = (
@@ -124,3 +128,42 @@ BROKER_URL = CELERY_RESULT_BACKEND = 'redis://localhost:6379/4'
 
 CELERY_TIMEZONE = 'UTC'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'mail_admins'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['console','mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        }
+    }
+}

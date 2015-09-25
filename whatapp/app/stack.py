@@ -2,9 +2,6 @@ from django.conf import settings
 from yowsup.layers.protocol_calls import YowCallsProtocolLayer
 from yowsup.layers.protocol_iq import YowIqProtocolLayer
 from yowsup.layers.protocol_media import YowMediaProtocolLayer
-
-__author__ = 'kenneth'
-
 from yowsup.stacks import YowStack
 from .layer import EchoLayer
 from yowsup.layers import YowLayerEvent
@@ -16,6 +13,10 @@ from yowsup.layers.stanzaregulator import YowStanzaRegulator
 from yowsup.layers.protocol_receipts import YowReceiptProtocolLayer
 from yowsup.layers.protocol_acks import YowAckProtocolLayer
 from yowsup.layers.logger import YowLoggerLayer
+
+
+__author__ = 'kenneth'
+
 
 class YowsupEchoStack(object):
     def __init__(self, encryption_enabled = True):
