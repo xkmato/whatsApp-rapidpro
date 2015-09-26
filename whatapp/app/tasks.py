@@ -15,7 +15,7 @@ def push_out(limit=30):
     r = get_redis_connection()
     key = 'sending_message_task_on'
     if not r.get(key):
-        with r.lock(key, timeout=60*10):
+        with r.lock(key, timeout=60*4):
             messages = Message.objects.filter(status=Message.QUEUED, direction=Message.OUTGOING).order_by('created_on')[
                            :limit]
             msg = list(messages.values_list('urn', 'text'))

@@ -119,8 +119,8 @@ STATIC_URL = '/static/'
 BROKER_URL = CELERY_RESULT_BACKEND = 'redis://localhost:6379/4'
 
 CELERYBEAT_SCHEDULE = {
-    'push-in': {
-        'task': 'whatapp.app.tasks.push_to_rapidpro',
+    'push-out': {
+        'task': 'whatapp.app.tasks.push_out',
         'schedule': datetime.timedelta(seconds=10),
         'args': ()
     },
