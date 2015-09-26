@@ -21,7 +21,7 @@ def push_out(limit=30):
             msg = list(messages.values_list('urn', 'text'))
             y = YowsupSendStack(msg)
             y.start()
-            messages.update(status=Message.SENT)
+            Message.objects.filter(pk__in=messages.values_list('pk', flat=True)).update(status=Message.SENT)
 
 
 @task
