@@ -27,7 +27,7 @@ def push_out(limit=30):
                 return
             for message in messages:
                 print "[%s] Processing message %s" % (str(datetime.now()), message.text)
-                msg = [message.urn, message.text]
+                msg = [(message.urn, message.text)]
                 y = YowsupSendStack(msg)
                 y.start()
                 message.status = Message.SENT
