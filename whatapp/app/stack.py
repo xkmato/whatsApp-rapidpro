@@ -4,7 +4,7 @@ from yowsup.layers.protocol_iq import YowIqProtocolLayer
 from yowsup.layers.protocol_media import YowMediaProtocolLayer
 from yowsup.stacks import YowStack
 from .layer import EchoLayer
-from yowsup.layers import YowLayerEvent
+from yowsup.layers import YowLayerEvent, YowParallelLayer
 from yowsup.layers.auth import YowCryptLayer, YowAuthenticationProtocolLayer, AuthError
 from yowsup.layers.coder import YowCoderLayer
 from yowsup.layers.network import YowNetworkLayer
@@ -24,7 +24,7 @@ class YowsupEchoStack(object):
             from yowsup.layers.axolotl import YowAxolotlLayer
             layers = (
                 EchoLayer,
-                (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer),
+                YowParallelLayer([YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer]),
                 YowAxolotlLayer,
                 YowLoggerLayer,
                 YowCoderLayer,
@@ -35,7 +35,7 @@ class YowsupEchoStack(object):
         else:
             layers = (
                 EchoLayer,
-                (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer),
+                YowParallelLayer([YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer]),
                 YowLoggerLayer,
                 YowCoderLayer,
                 YowCryptLayer,
