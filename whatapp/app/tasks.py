@@ -25,12 +25,13 @@ def push_out(limit=30):
             # somebody already handled these messages, move on
             if not messages:
                 return
-
-            print "[%s] Processing %d messages" % (str(datetime.now()),messages.count())
-            msg = list(messages.values_list('urn', 'text'))
-            y = YowsupSendStack(msg)
-            y.start()
-            messages.update(status=Message.SENT)
+            for message in messages:
+                print "[%s] Processing message %s" % (str(datetime.now()), message.text)
+                msg = [message.urn, message.text]
+                y = YowsupSendStack(msg)
+                y.start()
+                message.status = Message.SENT
+                message.save()
 
 
 
