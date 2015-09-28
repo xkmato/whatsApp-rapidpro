@@ -18,6 +18,7 @@ def push_out(limit=30):
     # somebody already handled these messages, move on
     if not messages:
         return
+    messages.update(status=Message.LIMBO)
     for message in messages:
         print "[%s] Processing message %s" % (str(datetime.now()), message.text)
         msg = [(message.urn, message.text)]

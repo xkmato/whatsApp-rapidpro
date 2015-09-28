@@ -9,6 +9,7 @@ __author__ = 'kenneth'
 class Message(models.Model):
     INCOMING = 'I'
     OUTGOING = 'O'
+    LIMBO = 'L'
 
     QUEUED = 'Q'
     SENT = 'S'
@@ -17,7 +18,8 @@ class Message(models.Model):
     urn = models.CharField(max_length=40)
     direction = models.CharField(choices=(('Incoming', INCOMING), ('Outgoing', OUTGOING)), max_length=1)
     created_on = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(choices=(('Queued', QUEUED), ('Sent', SENT)), default=QUEUED, max_length=1)
+    status = models.CharField(choices=(('Queued', QUEUED), ('Sent', SENT), ('Limbo', LIMBO)), default=QUEUED,
+                              max_length=1)
     rapidpro_id = models.CharField(max_length=40, blank=True, null=True)
 
     def __unicode__(self):
