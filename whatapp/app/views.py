@@ -14,5 +14,6 @@ def handle_rapidpro(request):
         id = request.POST.get("id")
 
         Message.objects.create(direction=Message.OUTGOING, text=text, urn=fro.strip('+'), rapidpro_id=id)
+        tasks.push_out.delay()
         return HttpResponse(status=200)
     return HttpResponse(status=401)
