@@ -50,4 +50,4 @@ class EchoLayer(YowInterfaceLayer):
             tasks.push_to_rapidpro.delay([m])
 
         else:
-            print("[%] Received unsupported message" % datetime.now())
+            print("[%s] Received unsupported message" % datetime.now())
