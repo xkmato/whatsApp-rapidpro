@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from whatapp.app import tasks
 from whatapp.app.models import Message
+from whatapp.app.utils import send_message_out
 
 __author__ = 'kenneth'
 
@@ -13,7 +14,7 @@ def handle_rapidpro(request):
         fro = request.POST.get('to')
         id = request.POST.get("id")
 
-        Message.objects.create(direction=Message.OUTGOING, text=text, urn=fro.strip('+'), rapidpro_id=id)
-        tasks.push_out.delay()
+        m = Message.objects.create(direction=Message.OUTGOING, text=text, urn=fro.strip('+'), rapidpro_id=id)
+        send_message_out(m)
         return HttpResponse(status=200)
     return HttpResponse(status=401)
