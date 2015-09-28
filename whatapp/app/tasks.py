@@ -27,8 +27,11 @@ def push_out(limit=30):
                 return
 
             print "[%s] Processing %d messages" % (str(datetime.now()),messages.count())
-            for message in messages:
-                message.notify_rapidpro_received()
+            msg = list(messages.values_list('urn', 'text'))
+            y = YowsupSendStack(msg)
+            y.start()
+            Message.objects.filter(pk__in=messages.values_list('pk', flat=True)).update(status=Message.SENT)
+
 
 
 @task
