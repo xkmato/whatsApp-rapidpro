@@ -20,7 +20,6 @@ def push_out(limit=30):
         time.sleep(10)
         return
 
-    messages.update(status=Message.LIMBO)
     for message in messages:
         logger.info("[%s] Processing message %s" % (str(datetime.now()), message.text))
         msg = [(message.urn, message.text)]
