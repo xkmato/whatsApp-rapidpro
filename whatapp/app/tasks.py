@@ -16,18 +16,18 @@ def push_out(limit=30):
 
     # somebody already handled these messages, move on
     if not messages:
-        logger.info("No more messages, now taking a 10 second nap")
+        logger.debug("No more messages, now taking a 10 second nap")
         time.sleep(10)
         return
 
     for message in messages:
-        logger.info("[%s] Processing message %s" % (str(datetime.now()), message.text))
+        logger.debug("[%s] Processing message %s" % (str(datetime.now()), message.text))
         msg = [(message.urn, message.text)]
         y = YowsupSendStack(msg)
         y.start()
         message.status = Message.SENT
         message.save()
-        logger.info("Message sent, now taking a 2 seconds nap")
+        logger.debug("Message sent, now taking a 2 seconds nap")
         time.sleep(2)
 
 
