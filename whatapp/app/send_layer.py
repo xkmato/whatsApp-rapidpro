@@ -2,6 +2,8 @@ from yowsup.layers.interface import ProtocolEntityCallback, YowInterfaceLayer
 from yowsup.layers.protocol_messages.protocolentities import TextMessageProtocolEntity
 import threading
 import logging
+from whatapp.exceptions import WhatsAppError
+
 logger = logging.getLogger(__name__)
 
 __author__ = 'kenneth'
@@ -53,6 +55,6 @@ class SendLayer(YowInterfaceLayer):
                 raise KeyboardInterrupt()
             except KeyboardInterrupt:
                 print "Kill exception sent, for move on"
-                pass
+                raise WhatsAppError("Just throwing this so that I can catch it")
         else:
             self.lock.release()

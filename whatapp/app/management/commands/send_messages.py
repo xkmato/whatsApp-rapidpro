@@ -3,6 +3,7 @@ import logging
 from django.core.management import BaseCommand
 from whatapp.app.models import Message
 from whatapp.app.send_stack import YowsupSendStack
+from whatapp.exceptions import WhatsAppError
 
 __author__ = 'kenneth'
 
@@ -19,10 +20,14 @@ class Command(BaseCommand):
             return
 
         for message in messages:
-            print "[%s] Processing message %s" % (str(datetime.now()), message.text)
-            msg = [(message.urn, message.text)]
-            y = YowsupSendStack(msg)
-            y.start()
-            message.status = Message.SENT
-            message.save()
-            print "Message sent"
+            try:
+                print "[%s] Processing message %s" % (str(datetime.now()), message.text)
+                msg = [(message.urn, message.text)]
+                y = YowsupSendStack(msg)
+                y.start()
+                message.status = Message.SENT
+                message.save()
+                print "Message sent"
+            except WhatsAppError:
+                print "Moving on"
+                continue
