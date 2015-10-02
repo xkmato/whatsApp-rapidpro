@@ -24,9 +24,8 @@ class Command(BaseCommand):
                 msg = [(message.urn, message.text)]
                 y = YowsupSendStack(msg)
                 y.start()
+            except KeyboardInterrupt:
                 message.status = Message.SENT
                 message.save()
                 print "Message sent to %s" % message.urn
-            except KeyboardInterrupt:
-                print "Moving on"
                 continue
