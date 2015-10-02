@@ -15,14 +15,14 @@ class Command(BaseCommand):
 
         # somebody already handled these messages, move on
         if not messages:
-            logger.debug("No more messages")
+            print "No more messages"
             return
 
         for message in messages:
-            logger.debug("[%s] Processing message %s" % (str(datetime.now()), message.text))
+            print "[%s] Processing message %s" % (str(datetime.now()), message.text)
             msg = [(message.urn, message.text)]
             y = YowsupSendStack(msg)
             y.start()
             message.status = Message.SENT
             message.save()
-            logger.debug("Message sent")
+            print "Message sent"
