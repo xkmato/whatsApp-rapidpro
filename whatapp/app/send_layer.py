@@ -2,6 +2,8 @@ from yowsup.layers.interface import ProtocolEntityCallback, YowInterfaceLayer
 from yowsup.layers.protocol_messages.protocolentities import TextMessageProtocolEntity
 import threading
 import logging
+from whatapp.exceptions import WhatsAppError
+
 logger = logging.getLogger(__name__)
 
 __author__ = 'kenneth'
@@ -49,6 +51,6 @@ class SendLayer(YowInterfaceLayer):
         if not len(self.ackQueue):
             self.lock.release()
             print "Message sent"
-            raise KeyboardInterrupt()
+            raise WhatsAppError("Raise to be caught")
         else:
             self.lock.release()

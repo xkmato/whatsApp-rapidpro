@@ -3,6 +3,7 @@ import logging
 from django.core.management import BaseCommand
 from whatapp.app.models import Message
 from whatapp.app.send_stack import YowsupSendStack
+from whatapp.exceptions import WhatsAppError
 
 __author__ = 'kenneth'
 
@@ -24,7 +25,7 @@ class Command(BaseCommand):
                 msg = [(message.urn, message.text)]
                 y = YowsupSendStack(msg)
                 y.start()
-            except KeyboardInterrupt:
+            except WhatsAppError:
                 message.status = Message.SENT
                 message.save()
                 print "Message sent to %s" % message.urn

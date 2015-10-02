@@ -13,6 +13,10 @@ from whatapp.app.send_layer import SendLayer
 
 __author__ = 'kenneth'
 
+import logging
+logger = logging.getLogger('yowsup.stacks.yowstack')
+logger.setLevel(logging.DEBUG)
+
 
 class YowsupSendStack(object):
     def __init__(self, messages, encryption_enabled=True):
