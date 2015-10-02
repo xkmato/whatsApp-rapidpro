@@ -1,0 +1,28 @@
+from datetime import datetime
+import logging
+from django.core.management import BaseCommand
+from whatapp.app.models import Message
+from whatapp.app.send_stack import YowsupSendStack
+
+__author__ = 'kenneth'
+
+logger = logging.getLogger(__name__)
+
+
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        messages = Message.objects.filter(direction=Message.OUTGOING, status=Message.QUEUED).order_by('created_on')
+
+        # somebody already handled these messages, move on
+        if not messages:
+            logger.debug("No more messages")
+            return
+
+        for message in messages:
+            logger.debug("[%s] Processing message %s" % (str(datetime.now()), message.text))
+            msg = [(message.urn, message.text)]
+            y = YowsupSendStack(msg)
+            y.start()
+            message.status = Message.SENT
+            message.save()
+            logger.debug("Message sent")

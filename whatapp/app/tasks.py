@@ -17,7 +17,6 @@ def push_out(limit=30):
     # somebody already handled these messages, move on
     if not messages:
         logger.debug("No more messages, now taking a 10 second nap")
-        time.sleep(10)
         return
 
     for message in messages:
@@ -28,7 +27,6 @@ def push_out(limit=30):
         message.status = Message.SENT
         message.save()
         logger.debug("Message sent, now taking a 2 seconds nap")
-        time.sleep(2)
 
 
 @task

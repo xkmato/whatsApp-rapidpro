@@ -19,7 +19,7 @@ __author__ = 'kenneth'
 
 
 class YowsupEchoStack(object):
-    def __init__(self, encryption_enabled = True):
+    def __init__(self, encryption_enabled=True):
         if encryption_enabled:
             from yowsup.layers.axolotl import YowAxolotlLayer
             layers = (
@@ -49,7 +49,7 @@ class YowsupEchoStack(object):
     def start(self):
         self.stack.broadcastEvent(YowLayerEvent(YowNetworkLayer.EVENT_STATE_CONNECT))
         try:
-            self.stack.loop(timeout=0.5, discrete=0.5)
+            self.stack.loop(discrete=0.5)
         except AuthError as e:
             print("Authentication Error: %s" % e.message)
         except Exception as e:
