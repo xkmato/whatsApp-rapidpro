@@ -30,3 +30,7 @@ class Command(BaseCommand):
                 message.save()
                 print "Message sent to %s" % message.urn
                 continue
+            except Exception as e:
+                message.status = Message.SENT
+                message.save()
+                print "Message message to %s failed: %s" % (message.urn, str(e))
