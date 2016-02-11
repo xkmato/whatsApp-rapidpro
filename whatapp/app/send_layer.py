@@ -51,6 +51,6 @@ class SendLayer(YowInterfaceLayer):
         if not len(self.ackQueue):
             self.lock.release()
             print "Message sent"
-            raise WhatsAppError("Raise to be caught")
-        else:
-            self.lock.release()
+            raise KeyboardInterrupt()
+
+        self.lock.release()
